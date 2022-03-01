@@ -100,18 +100,21 @@ int main()
     secret = "level";
 
     // Game start ----------------------------------------------------------------
-    std::cout << "What is your first guess?" << std::endl;
-    std::cin >> guesses[0];
+    
+    
 
-    for (int round = 1; round < 7; ++round)
+    for (int round = 0; round < 6; ++round)
     {
+        std::cout << "\x1b[mWhat is your guess?\r" << std::endl;
+        std::cin >> guesses[round];
         for (int charPos = 0; charPos < 5; ++charPos)
         {
-            std::string guess = guesses[charPos];
+            std::string guess = guesses[round];
             if (guess[charPos] == secret[charPos])
             {
-                std::cout << getColoredChar(guess[charPos], 2);
-                std::cout << "test";
+                // std::cout << getColoredChar(guess.at(charPos), 2);
+                //std::cout << "\x1b[30;42m" << guess.at(charPos) <<"\r";
+                 wprintf(L"\x1b[30;42m%hc", guess[charPos]);
             }
             else
             {
@@ -125,20 +128,14 @@ int main()
                         match = true;
                     }
                 }
-                
-                std::cout << getColoredChar(guess[charPos], match ? 1 : 0);
-                
+                match ? wprintf(L"\x1b[32m%hc", guess[charPos]) :
+                        wprintf(L"\033[37;40m%hc", guess[charPos]);
             }
         }
-        if (round < 7)
+        std::cout << std::endl;
+        if (round == 5)
         {
-            std::cout << std::endl;;
-            std::cout << "OK, next guess:";
-            std::cin >> guesses[round +1];
-        }
-        else
-        {
-            std::cout << "over";
+           break;
         }
     }
 

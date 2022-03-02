@@ -8,40 +8,6 @@
 #include <stdio.h>
 #include <array>
 
-std::string getColoredChar(char c, int correct)
-{
-    std::string base_string = "\x1b[";
-    switch (correct)
-    {
-        case 0: {base_string += "m"; break;}
-        case 1: {base_string += "32m"; break;}
-        case 2: {base_string += "30;42m"; break;}
-    }
-    base_string += c;
-    return base_string += "\r";
-}
-
-
-#define FOREGROUND(color, text) "\x1B[" << static_cast<int>(color) << "m" << text << "\033[0m"
-#define BACKGROUND(color, text) "\033[3;42;" << static_cast<int>(color) << "m" << text << "\033[0m"
-
-enum class ForegroundColor : int {
-    Red = 31,
-    Green = 32,
-    Yellow = 33,
-    BrightRed = 91,
-    BrightGreen = 92,
-    BrightYellow = 93
-};
-
-enum class BackgroundColor : int {
-    Red = 41,
-    Green = 42,
-    Yellow = 43,
-    BrightRed = 101,
-    BrightGreen = 102,
-    BrightYellow = 103
-};
 
 
 int main()
@@ -49,6 +15,7 @@ int main()
     std::string secret;
     std::string words;
     std::array<std::string, 6> guesses;
+    bool has_won = false;
 
     // Setting up for console colors -----------------------------------------
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -57,15 +24,9 @@ int main()
     if (!GetConsoleMode(hOut, &dwMode)) return GetLastError();
     dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
     if (!SetConsoleMode(hOut, dwMode)) return GetLastError();
-
-    std::cout << FOREGROUND(ForegroundColor::BrightRed, "Hello world!") << std::endl;
-    std::cout << BACKGROUND(BackgroundColor::BrightRed, "Hello world!") << std::endl;
-    std::cout << BACKGROUND(BackgroundColor::Yellow, "AB")
-        << BACKGROUND(BackgroundColor::Green, "C") << BACKGROUND(BackgroundColor::Red, "DE") << std::endl;
-
-    wprintf(L"\x1b[32mGreen on black\r\n");
-    wprintf(L"\x1b[30;42mBlack on green\r\n");
-    wprintf(L"\x1b[mReset to white on black\r\n");
+    // wprintf(L"\x1b[32mGreen on black\r\n");
+    // wprintf(L"\x1b[30;42mBlack on green\r\n");
+    // wprintf(L"\x1b[mReset to white on black\r\n");
     
     // Reading file ---------------------------------------------------------
     std::ifstream file("words.txt");
@@ -77,7 +38,6 @@ int main()
             currentchar = file.get();
             words += currentchar;
         }
-
         // std::string currentLine;
         // while (file)
         // {
@@ -100,21 +60,19 @@ int main()
     secret = "level";
 
     // Game start ----------------------------------------------------------------
-    
-    
-
     for (int round = 0; round < 6; ++round)
     {
         std::cout << "\x1b[mWhat is your guess?\r" << std::endl;
         std::cin >> guesses[round];
+        int correctChars = 0;
+        
         for (int charPos = 0; charPos < 5; ++charPos)
         {
             std::string guess = guesses[round];
             if (guess[charPos] == secret[charPos])
             {
-                // std::cout << getColoredChar(guess.at(charPos), 2);
-                //std::cout << "\x1b[30;42m" << guess.at(charPos) <<"\r";
-                 printf("\x1b[30;42m%hc\033[0m", guess[charPos]);
+                correctChars ++;
+                printf("\x1b[30;42m%hc\033[0m", guess[charPos]);
             }
             else
             {
@@ -128,15 +86,28 @@ int main()
                         match = true;
                     }
                 }
-                match ? printf("\x1b[32m%hc\033[0m", guess[charPos]) :
+                match ? printf("\x1b[92m%hc\033[0m", guess[charPos]) :
                         printf("\033[37;40m%hc\033[0m", guess[charPos]);
+            }
+            if (correctChars == 5)
+            {
+                has_won = true;
             }
         }
         std::cout << std::endl;
-        if (round == 5)
+        if (round == 5 || has_won)
         {
            break;
         }
+    }
+
+    if (has_won)
+    {
+        printf("You nailed it!");
+    }
+    else
+    {
+        printf("Sorry to see you humiliate yourself like that. Better luck next time.");
     }
 
     

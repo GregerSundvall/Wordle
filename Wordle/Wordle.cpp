@@ -114,7 +114,7 @@ int main()
             {
                 // std::cout << getColoredChar(guess.at(charPos), 2);
                 //std::cout << "\x1b[30;42m" << guess.at(charPos) <<"\r";
-                 wprintf(L"\x1b[30;42m%hc", guess[charPos]);
+                 printf("\x1b[30;42m%hc\033[0m", guess[charPos]);
             }
             else
             {
@@ -128,8 +128,8 @@ int main()
                         match = true;
                     }
                 }
-                match ? wprintf(L"\x1b[32m%hc", guess[charPos]) :
-                        wprintf(L"\033[37;40m%hc", guess[charPos]);
+                match ? printf("\x1b[32m%hc\033[0m", guess[charPos]) :
+                        printf("\033[37;40m%hc\033[0m", guess[charPos]);
             }
         }
         std::cout << std::endl;

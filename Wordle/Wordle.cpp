@@ -12,11 +12,9 @@
 
 int main()
 {
-    std::string secret;
     std::string words;
-    std::array<std::string, 6> guesses;
-    bool has_won = false;
-
+    bool play = true;
+    
     // Setting up for console colors -----------------------------------------
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     if (hOut == INVALID_HANDLE_VALUE) return GetLastError();
@@ -51,70 +49,76 @@ int main()
     }
     file.close();
 
-    // Picking random word -------------------------------------------------------
-    std::random_device rand_dev;
-    std::mt19937 generator(rand_dev());
-    std::uniform_int_distribution<int> distribution(0, 8597);
-    int randomRangedInt = distribution(generator);
-    // secret = words.substr( randomRangedInt * 6, 5);
-    secret = "level";
-
-    // Game start ----------------------------------------------------------------
-    for (int round = 0; round < 6; ++round)
+    while (play)
     {
-        std::cout << "\x1b[mWhat is your guess?\r" << std::endl;
-        std::cin >> guesses[round];
-        int correctChars = 0;
+        std::string secret;
+        std::array<std::string, 6> guesses;
+        bool has_won = false;
         
-        for (int charPos = 0; charPos < 5; ++charPos)
+        // Picking random word -------------------------------------------------------
+        std::random_device rand_dev;
+        std::mt19937 generator(rand_dev());
+        std::uniform_int_distribution<int> distribution(0, 8597);
+        int randomRangedInt = distribution(generator);
+        // secret = words.substr( randomRangedInt * 6, 5);
+        secret = "level";
+
+        // Game start ----------------------------------------------------------------
+        for (int round = 0; round < 6; ++round)
         {
-            std::string guess = guesses[round];
-            if (guess[charPos] == secret[charPos])
+            std::cout << "\x1b[mWhat's your guess?\r" << std::endl;
+            std::cin >> guesses[round];
+            int correctChars = 0;
+        
+            for (int charPos = 0; charPos < 5; ++charPos)
             {
-                correctChars ++;
-                printf("\x1b[30;42m%hc\033[0m", guess[charPos]);
-            }
-            else
-            {
-                // Check against other letters in word
-                bool match = false;
-                for (int j = 0; j < 5; ++j)
+                std::string guess = guesses[round];
+                if (guess[charPos] == secret[charPos])
                 {
-                    if (j == charPos) continue; // do not check letter in same location as self
-                    if (guess[charPos] == secret[j])
-                    {
-                        match = true;
-                    }
+                    correctChars ++;
+                    printf("\x1b[30;42m%hc\033[0m", guess[charPos]);
                 }
-                match ? printf("\x1b[92m%hc\033[0m", guess[charPos]) :
-                        printf("\033[37;40m%hc\033[0m", guess[charPos]);
+                else
+                {
+                    // Check against other letters in word
+                    bool match = false;
+                    for (int j = 0; j < 5; ++j)
+                    {
+                        if (j == charPos) continue; // do not check letter in same location as self
+                        if (guess[charPos] == secret[j])
+                        {
+                            match = true;
+                        }
+                    }
+                    match ? printf("\x1b[92m%hc\033[0m", guess[charPos]) :
+                            printf("\033[37;40m%hc\033[0m", guess[charPos]);
+                }
+                if (correctChars == 5)
+                {
+                    has_won = true;
+                }
             }
-            if (correctChars == 5)
+            std::cout << std::endl;
+            if (round == 5 || has_won)
             {
-                has_won = true;
+                break;
             }
         }
-        std::cout << std::endl;
-        if (round == 5 || has_won)
+
+        if (has_won)
         {
-           break;
+            printf("You nailed it!\n");
         }
-    }
+        else
+        {
+            printf("Sorry to see you humiliate yourself like that. Better luck next time.\n");
+        }
 
-    if (has_won)
-    {
-        printf("You nailed it!");
+        printf("Play again? y/n\n");
+        char playAgain;
+        std::cin >> playAgain;
+        if (playAgain != 'y') play = false;
     }
-    else
-    {
-        printf("Sorry to see you humiliate yourself like that. Better luck next time.");
-    }
-
-    
-
-    
-    
-    
-    
+        
     return 0;
 }

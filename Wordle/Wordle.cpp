@@ -1,60 +1,29 @@
-#pragma once
 
-#include <fstream>
 #include <iostream>
 #include <random>
 #include <string>
-#include <Windows.h>
-#include <stdio.h>
 #include <array>
-
+#include "words.h"
+#include "consoleColors.h"
 
 
 int main()
 {
-    std::string words;
+    words words;
     bool play = true;
     
-    // Setting up for console colors -----------------------------------------
-    HANDLE h_out = GetStdHandle(STD_OUTPUT_HANDLE);
-    if (h_out == INVALID_HANDLE_VALUE) return GetLastError();
-    DWORD dw_mode = 0;
-    if (!GetConsoleMode(h_out, &dw_mode)) return GetLastError();
-    dw_mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-    if (!SetConsoleMode(h_out, dw_mode)) return GetLastError();
-    
-    // Reading file ---------------------------------------------------------
-    std::ifstream file("words.txt");
-    if (file.is_open())
-    {
-        char current_char;
-        while (file)
-        {
-            current_char = file.get();
-            words += tolower(current_char);
-        }
-    }
-    else
-    {
-        std::cout << "Couldn't open file"<< std::endl;
-    }
-    file.close();
+    setup_console_colors_support();
+    words.import_from_file("words.txt");
 
     std::cout << "Five letter word. Six guesses. You got this." << std::endl;
+    
     // Game loop -----------------------------------------------------------------
     while (play)
     {
         std::string secret;
         std::array<std::string, 6> guesses;
         bool has_won = false;
-        
-        // Picking random word -------------------------------------------------------
-        std::random_device rand_dev;
-        std::mt19937 generator(rand_dev());
-        std::uniform_int_distribution<int> distribution(0, 8597);
-        int random_ranged_int = distribution(generator);
-        secret = words.substr( random_ranged_int * 6, 5);
-
+        secret = words.get_random();
         // Game start ----------------------------------------------------------------
         for (int round = 0; round < 6; ++round)
         {

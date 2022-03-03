@@ -6,6 +6,7 @@
 #include "words.h"
 #include "consoleColors.h"
 
+bool check_input(std::string& input);
 
 int main()
 {
@@ -27,8 +28,14 @@ int main()
         // Game start ----------------------------------------------------------------
         for (int round = 0; round < 6; ++round)
         {
-            std::cout << "\n" << "\x1b[mWhat's your guess? ";
-            std::cin >> guesses[round];
+            bool input_error = true;
+            while (input_error)
+            {
+                std::cout << "\n" << "\x1b[mWhat's your guess? ";
+                std::cin >> guesses[round];
+                input_error = check_input(guesses[round]);
+            }
+            
             int correct_chars = 0;
         
             for (int char_pos = 0; char_pos < 5; ++char_pos)
@@ -84,4 +91,23 @@ int main()
     }
         
     return 0;
+}
+
+bool check_input(std::string& input)
+{
+    if (input.size() != 5)
+    {
+        std::cout << "F I V E letters please.";
+        return true;
+    }
+    for (char& c : input)
+    {
+        if (!isalpha(c))
+        {
+            std::cout << "Five L E T T E R S please.";
+            return true;
+        }
+        c = tolower(c);
+    }
+    return false;
 }

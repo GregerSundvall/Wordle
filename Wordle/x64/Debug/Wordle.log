@@ -1,0 +1,11 @@
+﻿  Wordle.cpp
+  words.cpp
+E:\code\C++\Wordle\Wordle\words.cpp(20,74): warning C4267: 'argument': conversion from 'size_t' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+  Generating Code...
+E:\code\C++\Wordle\Wordle\words.cpp(32): warning C4715: 'words::get_random': not all control paths return a value
+E:\code\C++\Wordle\Wordle\consoleColors.h(15): warning C4715: 'setup_console_colors_support': not all control paths return a value
+  Wordle.vcxproj -> E:\code\C++\Wordle\x64\Debug\Wordle.exe

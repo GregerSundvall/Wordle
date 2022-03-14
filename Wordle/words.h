@@ -1,10 +1,10 @@
-﻿
+﻿#include <assert.h>
 
 
-class Word{
-    char m_data[];
-
-};
+//class Word{
+//    char m_data[];
+//
+//};
 
 
 
@@ -15,19 +15,87 @@ public:
         ReAlloc(2);
     }
 
-
-    void PushBack(const std::string& item){
-        if ( m_size >= m_capacity ) {
-            ReAlloc(m_capacity * 2);
-        }
-        m_data[m_size] = item;
-        m_size++;
+    ~Words(){
+        delete[] m_data;
     }
 
 
-    std::string& operator[](size_t index) { return m_data[index]; }
-    std::string& operator[](size_t index) { return m_data[index]; }
-    const std::string& operator[](size_t index) const { return m_data[index]; }
+
+
+    void Add(std::string&& input)
+    {
+        char word[5];
+        for (size_t i = 0; i < 5; i++)
+        {
+            word[i] = input[i];
+        }
+
+        std::string* newBlock;
+
+        if ( m_size < m_capacity ) 
+        {
+            newBlock = new std::string[m_capacity];
+        }
+        else 
+        {
+            m_capacity *= 2;
+            newBlock = new std::string[m_capacity];
+        }
+
+        if ( m_size == 0 ) 
+        {
+            newBlock[0] = std::move(input);
+            m_size++;
+            std::cout << "first added" << std::endl;
+        }
+        else 
+        {
+            for ( size_t i = 0; i < m_size; i++ ) 
+            {
+                std::cout << "Word for loop iteration " << i << std::endl;
+                for ( size_t j = 0; j < 4; j++ ) 
+                {
+                    std::cout << "Char for loop iteration " << j << std::endl;
+                    std::cout << "item[j] is " << input[j] << std::endl;
+
+                    if ( input[j] > m_data[i][j])
+                    {
+                        //std::cout << item << std::endl;
+                        newBlock[i] = std::move(m_data[i]);
+                        break;
+                    }
+                    else if ( input[j]  < m_data[i][j])
+                    {
+                        //std::cout << item << std::endl;
+                        newBlock[i] = std::move(input);
+                        m_size++;
+                        break;
+                    }
+                    else if (j == 4)
+                    {
+                        // Attempting to add duplicate, using "original".
+                        newBlock[i] = std::move(m_data[i]);
+                    }
+                }
+            
+            }
+        }
+        
+
+        delete[] m_data;
+        m_data = newBlock;
+    }
+
+    std::string& operator[](size_t index) { 
+        if ( index >= m_size ) {
+            assert(index < m_size, "Index out of bounds");
+        }
+        return m_data[index]; }
+    const std::string& operator[](size_t index) const { 
+        if ( index >= m_size ) {
+            assert(index < m_size, "Index out of bounds");
+        }
+        return m_data[index]; }
     
     size_t Size() const { return m_size; }
 private:
@@ -41,18 +109,43 @@ private:
         for ( size_t i = 0; i < m_size; i++ ) {
             newBlock[i] = std::move(m_data[i]);
         }
-        delete m_data;
+        delete[] m_data;
         m_data = newBlock;
         m_capacity = newCapacity;
     }
     std::string* m_data = nullptr;
-    size_t m_size;
-    size_t m_capacity;
+    size_t m_size = 0;
+    size_t m_capacity = 0;
 };
 
 
+    //void PopBack(){
+    //    if ( m_size > 0 ) {
+    //        m_size--;
+    //        m_data[m_size].~basic_string();
+    //    }
+    //}
+    //void Clear(){
+    //    for ( size_t i = 0; i < m_size; i++ ) {
+    //        m_data[i].~basic_string();
+    //    }
+    //    m_size = 0;
+    //}
 
-
+    //void PushBack(const std::string& item){
+    //    if ( m_size >= m_capacity ) {
+    //        ReAlloc(m_capacity * 2);
+    //    }
+    //    m_data[m_size] = item;
+    //    m_size++;
+    //}
+    //void PushBack(std::string&& item){
+    //    if ( m_size >= m_capacity ) {
+    //        ReAlloc(m_capacity * 2);
+    //    }
+    //    m_data[m_size] = std::move(item);
+    //    m_size++;
+    //}
 
 
 

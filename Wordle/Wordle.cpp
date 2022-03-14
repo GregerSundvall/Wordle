@@ -18,10 +18,16 @@ void PrintWords(const Words& words){
 int main()
 {
     Words wordsNew;
-    wordsNew.PushBack("asdff");
-    wordsNew.PushBack("csdff");
-    wordsNew.PushBack("bsdff");
-    PrintWords(wordsNew);
+    //wordsNew.PushBack("asdff");
+    //wordsNew.PushBack("csdff");
+    //wordsNew.PushBack("bsdff");
+    wordsNew.Add("hjklf");
+    wordsNew.Add("jklfa");
+    //PrintWords(wordsNew);
+    //std::cout << wordsNew[0][0];
+    wordsNew.Add("bjklf");
+    wordsNew.Add("ajklf");
+    //PrintWords(wordsNew);
 
     std::cin.get();
 

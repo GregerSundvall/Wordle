@@ -22,7 +22,7 @@ public:
 
 
 
-    void Add(std::string&& input)
+    void Add(const std::string&& input)
     {
         char word[5];
         for (size_t i = 0; i < 5; i++)
@@ -50,34 +50,46 @@ public:
         }
         else 
         {
-            for ( size_t i = 0; i < m_size; i++ ) 
-            {
-                std::cout << "Word for loop iteration " << i << std::endl;
-                for ( size_t j = 0; j < 4; j++ ) 
-                {
-                    std::cout << "Char for loop iteration " << j << std::endl;
-                    std::cout << "item[j] is " << input[j] << std::endl;
+            bool isFound = false;
+            bool isDuplicate = false;
 
-                    if ( input[j] > m_data[i][j])
+            for (size_t i = 0; i < m_size; i++)
+            {
+                if (!isFound)
+                {
+                    std::cout << "word to add: " << input << std::endl;
+                    std::cout << "Word for loop iteration " << i << std::endl;
+                    for (size_t j = 0; j < 5; j++)
                     {
-                        //std::cout << item << std::endl;
-                        newBlock[i] = std::move(m_data[i]);
-                        break;
-                    }
-                    else if ( input[j]  < m_data[i][j])
-                    {
-                        //std::cout << item << std::endl;
-                        newBlock[i] = std::move(input);
-                        m_size++;
-                        break;
-                    }
-                    else if (j == 4)
-                    {
-                        // Attempting to add duplicate, using "original".
-                        newBlock[i] = std::move(m_data[i]);
+                        std::cout << "Char for loop iteration " << j << std::endl;
+                        std::cout << "m_data[i][j] is " << m_data[i][j] << std::endl;
+                        std::cout << "input[j] is " << input[j] << std::endl;
+                        if (input[j] > m_data[i][j])
+                        {
+                            newBlock[i] = std::move(m_data[i]);
+                            m_size++;
+                            isFound = true;
+                            break;
+                        }
+                        else if (input[j] < m_data[i][j])
+                        {
+                            newBlock[i] = std::move(input);
+                            m_size++;
+                            isFound = true;
+                            break;
+                        }
+                        else if (j == 4)
+                        {
+                            // Attempting to add duplicate, using "original".
+                            newBlock[i] = std::move(m_data[i]);
+                            isFound = true;
+                        }
                     }
                 }
-            
+                else
+                {
+                    newBlock[i + isDuplicate? 0 : 1] = std::move(m_data[i]);
+                }
             }
         }
         

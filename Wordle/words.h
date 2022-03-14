@@ -1,10 +1,7 @@
 ﻿#include <assert.h>
 
 
-//class Word{
-//    char m_data[];
-//
-//};
+
 
 
 
@@ -24,27 +21,27 @@ public:
 
     void Add(std::string&& input)
     {
-        char word[5];
+        char* word = new char[5];
         for (size_t i = 0; i < 5; i++)
         {
             word[i] = input[i];
         }
 
-        std::string* newBlock;
+        char* newBlock;
 
         if ( m_size < m_capacity ) 
         {
-            newBlock = new std::string[m_capacity];
+            newBlock = new char[m_capacity];
         }
         else 
         {
             m_capacity *= 2;
-            newBlock = new std::string[m_capacity];
+            newBlock = new char[m_capacity];
         }
 
         if ( m_size == 0 ) 
         {
-            newBlock[0] = std::move(input);
+            newBlock[0] = *word;
             m_size++;
             std::cout << "first added" << std::endl;
         }
@@ -56,18 +53,18 @@ public:
                 for ( size_t j = 0; j < 4; j++ ) 
                 {
                     std::cout << "Char for loop iteration " << j << std::endl;
-                    std::cout << "item[j] is " << input[j] << std::endl;
+                    std::cout << "item[j] is " << (*word)[word + j] << std::endl;
 
-                    if ( input[j] > m_data[i][j])
+                    if ((*word)[word + j] > m_data[i][word + j])
                     {
                         //std::cout << item << std::endl;
                         newBlock[i] = std::move(m_data[i]);
                         break;
                     }
-                    else if ( input[j]  < m_data[i][j])
+                    else if ((*word)[word + j] < m_data[i][word + j])
                     {
                         //std::cout << item << std::endl;
-                        newBlock[i] = std::move(input);
+                        newBlock[i] = (*word)[word + j];
                         m_size++;
                         break;
                     }
@@ -86,21 +83,24 @@ public:
         m_data = newBlock;
     }
 
-    std::string& operator[](size_t index) { 
+    char& operator[](size_t index) { 
         if ( index >= m_size ) {
             assert(index < m_size, "Index out of bounds");
         }
-        return m_data[index]; }
-    const std::string& operator[](size_t index) const { 
+        return m_data[index];
+    }
+    const char& operator[](size_t index) const { 
         if ( index >= m_size ) {
             assert(index < m_size, "Index out of bounds");
         }
-        return m_data[index]; }
+        return m_data[index];
+    }
+    
     
     size_t Size() const { return m_size; }
 private:
     void ReAlloc(size_t newCapacity){
-        std::string* newBlock = new std::string[newCapacity];
+        char* newBlock = new char[newCapacity];
 
         if ( newCapacity < m_size ) {
             m_size = newCapacity;
@@ -113,7 +113,7 @@ private:
         m_data = newBlock;
         m_capacity = newCapacity;
     }
-    std::string* m_data = nullptr;
+    char* m_data = nullptr;
     size_t m_size = 0;
     size_t m_capacity = 0;
 };

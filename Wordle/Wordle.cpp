@@ -10,7 +10,6 @@ bool check_input(std::string& input);
 
 
 void PrintWords(const Words& words){
-    std::cout << words.Size() << " words" << std::endl;
     for ( size_t i = 0; i < words.Size(); i++ ) {
         std::cout << words[i] << std::endl;
     }
@@ -19,20 +18,19 @@ void PrintWords(const Words& words){
 int main()
 {
     Words wordsNew;
-    //wordsNew.PushBack("asdff");
-    //wordsNew.PushBack("csdff");
-    //wordsNew.PushBack("bsdff");
-    wordsNew.Add("hjklf");
-    PrintWords(wordsNew);
-    wordsNew.Add("jklfa");
+    wordsNew.Add("ccccc");
+    wordsNew.Add("ddddd");
+    wordsNew.Add("bbbbb");
+    wordsNew.Add("aaaaa");
+    //wordsNew.Add("bbbbb");
     PrintWords(wordsNew);
     //std::cout << wordsNew[0][0];
-    wordsNew.Add("bjklf");
-    PrintWords(wordsNew);
-    wordsNew.Add("ajklf");
-    PrintWords(wordsNew);
+    //wordsNew.Add("bbbbb");
+    //PrintWords(wordsNew);
+    //wordsNew.Add("vvvvv");
+    //PrintWords(wordsNew);
 
-    std::cin.get();
+    
 
     //oldWords words;
     //bool play = true;

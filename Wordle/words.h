@@ -9,7 +9,9 @@
 
 
 class Words{
-    
+    char** m_data = nullptr;
+    size_t m_size = 0;
+    size_t m_capacity = 0;
 public:
     Words(){
         //ReAlloc(2);
@@ -20,94 +22,64 @@ public:
     }
 
 
-
-
-    void Add(std::string&& input)
+    void Add(const char* input)
     {
-        
-
-        char** newBlock;
-
-        if ( m_size < m_capacity ) 
-        {
-            *newBlock = new char[m_capacity];
-        }
-        else 
-        {
-            m_capacity *= 2;
-            *newBlock = new char[m_capacity];
-        }
+        char** newBlock = new char*[m_size + 1];
 
         if ( m_size == 0 ) 
         {
-            newBlock[0] = new char[5];
-            for (size_t i = 0; i < 5; i++)
-            {
-                newBlock[0][i] = input[i];
-            }
+            newBlock[0] = (char*)input;
             m_size++;
-            std::cout << "first added" << std::endl;
         }
         else 
         {
-            bool isFound = false;
-            bool isDuplicate = false;
-
+            bool newWordIsAdded = false;
             for (size_t i = 0; i < m_size; i++)
             {
-                if (!isFound)
+                if (!newWordIsAdded)
                 {
-                    std::cout << "word to add: " << input << std::endl;
-                    std::cout << "Word for loop iteration " << i << std::endl;
                     for (size_t j = 0; j < 5; j++)
                     {
-                        std::cout << "Char for loop iteration " << j << std::endl;
-                        std::cout << "m_data[i][j] is " << m_data[i][j] << std::endl;
-                        std::cout << "input[j] is " << input[j] << std::endl;
                         if (input[j] > m_data[i][j])
                         {
-                            newBlock[i] = new char[5];
-                            newBlock[i] = std::move(m_data[i]);
-                            m_size++;
-                            isFound = true;
+                            newBlock[i] = m_data[i];
                             break;
                         }
                         else if (input[j] < m_data[i][j])
                         {
-                            newBlock[i] = new char[5];
-                            for (size_t i = 0; i < 5; i++)
-                            {
-                                newBlock[0][i] = input[i];
-                            }
+                            newBlock[i] = (char*)input;
                             m_size++;
-                            isFound = true;
+                            newWordIsAdded = true;
                             break;
                         }
                         else if (j == 4)
                         {
                             // Attempting to add duplicate, using "original".
-                            newBlock[i] = new char[5];
-                            newBlock[i] = std::move(m_data[i]);
-                            isFound = true;
+                            newBlock[i] = m_data[i];
+                            newWordIsAdded = true;
+                            // deallocate stuff?
+                            return;
                         }
                     }
                 }
                 else
                 {
-                    newBlock[i] = new char[5];
-                    newBlock[i + isDuplicate? 0 : 1] = std::move(m_data[i]);
+                    newBlock[i] = m_data[i - 1];
                 }
+            }
+
+            if (!newWordIsAdded)
+            {
+                newBlock[m_size] = (char*)input;
+                std::cout << newBlock[m_size] << " added last" << std::endl;
+                m_size++;
             }
         }
         
-
         delete[] m_data;
-        *m_data = new char[m_capacity];
-        for (size_t i = 0; i < m_size; i++)
-        {
-            m_data[i] = std::move(newBlock[i]);
-        }
-        delete[] newBlock;
+        m_data = newBlock;
+        newBlock = nullptr;
+
     }
 
     //std::string& operator[](size_t index) { 
@@ -116,31 +88,15 @@ public:
     //    }
 
     //    return m_data[index]; }
-    const std::string& operator[](size_t index) const { 
+    const std::string operator[](size_t index) const { 
         //if ( index >= m_size ) {
         //    assert(index < m_size, "Index out of bounds");
         //}
-        return m_data[index]; }
+        return std::string(m_data[index]); }
     
     size_t Size() const { return m_size; }
-private:
-    //void ReAlloc(size_t newCapacity){
-    //    std::string* newBlock = new std::string[newCapacity];
 
-    //    if ( newCapacity < m_size ) {
-    //        m_size = newCapacity;
-    //    }
 
-    //    for ( size_t i = 0; i < m_size; i++ ) {
-    //        newBlock[i] = std::move(m_data[i]);
-    //    }
-    //    delete[] m_data;
-    //    m_data = newBlock;
-    //    m_capacity = newCapacity;
-    //}
-    char** m_data;
-    size_t m_size = 0;
-    size_t m_capacity = 0;
 };
 
 

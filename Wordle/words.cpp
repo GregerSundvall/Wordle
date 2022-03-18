@@ -1,8 +1,5 @@
 ﻿#pragma once
 #include "words.h"
-#include <random>
-
-
 
 
 size_t words::size()

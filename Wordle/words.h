@@ -1,26 +1,92 @@
-﻿#include <assert.h>
+﻿#include <fstream>
+#include <iostream>
+#include <vector>
+#include <string>
 
 
-//class Word{
-//    char m_data[];
-//
-//};
+class words
+{
+    std::vector<std::string> data;
+
+    bool already_exists(std::string input);
+public:
+    size_t size();
+
+    int is_valid(std::string input);
+
+    std::string to_upper(std::string input);
+
+    void add(std::string input);
+
+    void import_from_file(std::string file_name);
+
+    std::string get_random();
+};
 
 
 
+
+
+
+/*
 class Words{
     char** m_data = nullptr;
     size_t m_size = 0;
-    size_t m_capacity = 0;
 public:
     Words(){
-        //ReAlloc(2);
     }
 
     ~Words(){
         delete[] m_data;
     }
 
+    char get_random()
+    {
+        std::random_device rand_dev;
+        std::mt19937 generator(rand_dev());
+        std::uniform_int_distribution<int> distribution(0, m_size);
+        int random_ranged_int = distribution(generator);
+        std::cout << m_size << " " << random_ranged_int << std::endl;
+        return *m_data[random_ranged_int];
+    }
+
+    void import_from_file(std::string filename)
+    {
+        std::ifstream file(filename);
+        if (file.is_open())
+        {
+            char word[6]{};
+            std::string current_line;
+            while (file)
+            {
+                std::getline(file, current_line);
+                for (size_t i = 0; i < 5; i++)
+                {
+                    char c = current_line[i];
+                    c = std::tolower(c);
+                    word[i] = c;
+                }
+                Add(word);
+                std::cout << m_size << word << m_data[0] << std::endl;
+            }
+            std::cout << m_size << std::endl;
+        }
+        else
+        {
+            std::cout << "Couldn't open file"<< std::endl;
+        }
+        file.close();
+    }
+
+    void Add(std::string input)
+    {
+        char c_array[6];
+        for (size_t i = 0; i < 6; i++)
+        {
+            c_array[i] = input[i];
+        }
+        Add(c_array);
+    }
 
     void Add(const char* input)
     {
@@ -71,7 +137,6 @@ public:
             if (!newWordIsAdded)
             {
                 newBlock[m_size] = (char*)input;
-                std::cout << newBlock[m_size] << " added last" << std::endl;
                 m_size++;
             }
         }
@@ -95,65 +160,10 @@ public:
         return std::string(m_data[index]); }
     
     size_t Size() const { return m_size; }
-
-
 };
+*/
 
 
-    //void PopBack(){
-    //    if ( m_size > 0 ) {
-    //        m_size--;
-    //        m_data[m_size].~basic_string();
-    //    }
-    //}
-    //void Clear(){
-    //    for ( size_t i = 0; i < m_size; i++ ) {
-    //        m_data[i].~basic_string();
-    //    }
-    //    m_size = 0;
-    //}
-
-    //void PushBack(const std::string& item){
-    //    if ( m_size >= m_capacity ) {
-    //        ReAlloc(m_capacity * 2);
-    //    }
-    //    m_data[m_size] = item;
-    //    m_size++;
-    //}
-    //void PushBack(std::string&& item){
-    //    if ( m_size >= m_capacity ) {
-    //        ReAlloc(m_capacity * 2);
-    //    }
-    //    m_data[m_size] = std::move(item);
-    //    m_size++;
-    //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//#pragma once
-//#include <map>
-//#include <string>
 
 
 

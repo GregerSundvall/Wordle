@@ -18,7 +18,7 @@ public:
 
     void add(std::string input);
 
-    void import_from_file(std::string file_name);
+    bool import_from_file(std::string file_name);
 
     std::string get_random();
 };

@@ -20,22 +20,13 @@ std::string words::get_random()
 
 int words::is_valid(std::string input)
 {
-    if (input.size() < 5)
-    {
-        return 0;
-    }
+    if (input.size() < 5) { return 0; }
     
-    if (input.size() > 5)
-    {
-        return 1;
-    }
+    if (input.size() > 5) { return 1; }
 
     for (size_t i = 0; i < 5; i++)
     {
-        if (!isalpha(input.at(i)))
-        {
-            return 2;
-        }
+        if (!isalpha(input.at(i))) { return 2; }
     }
     return -1;
 }
@@ -77,7 +68,7 @@ void words::add(std::string input)
     }
 }
 
-void words::import_from_file(std::string file_name)
+bool words::import_from_file(std::string file_name)
 {
     std::ifstream file(file_name);
     if (file.is_open())
@@ -94,12 +85,14 @@ void words::import_from_file(std::string file_name)
             }
             add(str);
         }
+        file.close();
+        return true;
     }
     else
     {
-        std::cout << "Couldn't open file" << std::endl;
+        file.close();
+        return false;
     }
-    file.close();
 }
 
 

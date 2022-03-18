@@ -13,21 +13,29 @@ int main()
     bool play = true;
     
     setup_console_colors_support();
-    words.import_from_file("words.txt");
+    if (words.import_from_file("words.txt"))
+    {
+        std::cout << "Words imported from file successfully.\n" << std::endl;
+    }
+    else
+    {
+        std::cout << "Something went wrong while imoporting words from file\n" << std::endl;
+    }
 
-    std::cout << "Five letter word. Six guesses. You got this." << std::endl;
+
+    std::cout << "Five letter word. Six guesses. You got this.";
     
     // Game loop -----------------------------------------------------------------
     while (play)
     {
         std::string secret;
         bool has_won = false;
+        secret = words.get_random();
+        std::array<std::string, 6> guesses{};
 
         // Game session start ----------------------------------------------------------------
         for (int round = 0; round < 6; ++round)
         {
-            std::array<std::string, 6> guesses{};
-            secret = words.get_random();
             int input_error{}; // -1 = No error
             std::string guess;
             int correct_chars = 0;

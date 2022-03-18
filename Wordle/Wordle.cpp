@@ -1,11 +1,10 @@
-
 #include <iostream>
 #include <random>
 #include <string>
-#include "words.h"
-#include "consoleColors.h"
 #include <initializer_list>
 #include <array>
+#include "words.h"
+#include "consoleColors.h"
 
 int main()
 {
@@ -21,7 +20,6 @@ int main()
     {
         std::cout << "Something went wrong while imoporting words from file\n" << std::endl;
     }
-
 
     std::cout << "Five letter word. Six guesses. You got this.";
     
@@ -119,5 +117,4 @@ int main()
         
     return 0;
 }
-
 

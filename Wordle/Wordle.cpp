@@ -6,7 +6,7 @@
 #include "words.h"
 #include "consoleColors.h"
 
-bool check_input(std::string& input);
+bool check_input(std::string& input); // feedback: plus points for using a string ref here!
 
 int main()
 {
